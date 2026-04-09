@@ -45,7 +45,7 @@ export function CategoryFilter({ items }: { items: NewsItem[] }) {
             <button
               key={cat.value}
               onClick={() => setActiveCategory(cat.value)}
-              className={`shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium transition-colors ${
+              className={`shrink-0 flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-colors ${
                 isActive
                   ? "bg-foreground text-background"
                   : "bg-secondary text-muted-foreground hover:text-foreground hover:bg-accent"
@@ -53,7 +53,7 @@ export function CategoryFilter({ items }: { items: NewsItem[] }) {
             >
               {cat.label}
               <span
-                className={`font-mono text-[10px] ${
+                className={`font-mono text-xs ${
                   isActive ? "opacity-60" : "opacity-50"
                 }`}
               >
@@ -78,7 +78,7 @@ export function CategoryFilter({ items }: { items: NewsItem[] }) {
         ))}
 
         {filtered.length === 0 && (
-          <div className="flex items-center justify-center py-20 text-sm text-muted-foreground rounded-2xl border border-border bg-card">
+          <div className="flex items-center justify-center py-20 text-base text-muted-foreground rounded-2xl border border-border bg-card">
             No stories in this category right now.
           </div>
         )}

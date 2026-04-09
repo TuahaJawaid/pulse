@@ -45,20 +45,20 @@ export function ExecutiveSummary({ items }: { items: NewsItem[] }) {
       <div className="flex items-center justify-between px-5 py-4 border-b border-border">
         <div className="flex items-center gap-2.5">
           <div className="w-2 h-2 rounded-full bg-lime animate-pulse" />
-          <span className="text-sm font-semibold tracking-tight">
+          <span className="text-base font-semibold tracking-tight">
             AI Executive Briefing
           </span>
         </div>
         {!hasStarted && (
           <button
             onClick={handleGenerate}
-            className="px-4 py-2 rounded-full text-xs font-semibold bg-foreground text-background hover:opacity-90 transition-opacity"
+            className="px-5 py-2.5 rounded-full text-sm font-semibold bg-foreground text-background hover:opacity-90 transition-opacity"
           >
             Generate Briefing
           </button>
         )}
         {isStreaming && (
-          <span className="text-xs font-mono text-muted-foreground animate-pulse">
+          <span className="text-sm font-mono text-muted-foreground animate-pulse">
             analyzing...
           </span>
         )}
@@ -66,7 +66,7 @@ export function ExecutiveSummary({ items }: { items: NewsItem[] }) {
 
       <div className="px-5 py-4">
         {!hasStarted && (
-          <p className="text-sm text-muted-foreground">
+          <p className="text-base text-muted-foreground">
             Click &quot;Generate Briefing&quot; for an AI-powered summary of
             today&apos;s most important AI developments.
           </p>
@@ -81,7 +81,7 @@ export function ExecutiveSummary({ items }: { items: NewsItem[] }) {
         )}
 
         {assistantText && (
-          <div className="text-sm leading-relaxed [&_h2]:text-sm [&_h2]:font-semibold [&_h2]:text-foreground [&_h3]:text-sm [&_h3]:font-medium [&_li]:text-foreground/80 [&_p]:text-foreground/80 [&_strong]:text-foreground">
+          <div className="text-base leading-relaxed [&_h2]:text-base [&_h2]:font-semibold [&_h2]:text-foreground [&_h3]:text-base [&_h3]:font-medium [&_li]:text-foreground/80 [&_p]:text-foreground/80 [&_strong]:text-foreground">
             <MessageResponse>{assistantText}</MessageResponse>
           </div>
         )}

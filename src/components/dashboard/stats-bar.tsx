@@ -13,21 +13,21 @@ export function StatsBar({ stats }: { stats: DashboardStats }) {
       {items.map((item) => (
         <div
           key={item.label}
-          className={`rounded-2xl border p-5 transition-colors ${
+          className={`rounded-2xl border p-6 transition-colors ${
             item.accent
               ? "bg-lime text-lime-foreground border-transparent"
               : "bg-card border-border"
           }`}
         >
           <div
-            className={`text-3xl font-medium tracking-tight font-mono tabular-nums ${
+            className={`text-4xl font-semibold tracking-tight font-mono tabular-nums ${
               item.accent ? "" : "text-foreground"
             }`}
           >
             {item.value}
           </div>
           <div
-            className={`text-xs font-medium mt-1.5 ${
+            className={`text-sm font-medium mt-2 ${
               item.accent ? "text-lime-foreground/70" : "text-muted-foreground"
             }`}
           >

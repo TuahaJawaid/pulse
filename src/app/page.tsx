@@ -16,16 +16,16 @@ export default async function Home() {
       <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur-lg">
         <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-lime text-lime-foreground font-bold text-sm">
+            <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-lime text-lime-foreground font-bold text-base">
               P
             </div>
-            <h1 className="text-lg font-medium tracking-tight">Pulse</h1>
-            <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground border border-border rounded-full px-2 py-0.5">
+            <h1 className="text-xl font-semibold tracking-tight">Pulse</h1>
+            <span className="text-xs font-mono uppercase tracking-widest text-muted-foreground border border-border rounded-full px-2.5 py-0.5">
               AI Intelligence
             </span>
           </div>
           <div className="flex items-center gap-4">
-            <span className="hidden sm:block text-[11px] font-mono text-muted-foreground">
+            <span className="hidden sm:block text-sm font-mono text-muted-foreground">
               {new Date().toLocaleDateString("en-US", {
                 weekday: "long",
                 month: "long",
@@ -52,7 +52,7 @@ export default async function Home() {
 
       {/* Footer */}
       <footer className="border-t border-border">
-        <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 py-4 text-[11px] font-mono text-muted-foreground">
+        <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 py-4 text-xs font-mono text-muted-foreground">
           <span>Pulse — AI News Intelligence</span>
           <span>Sources: Hacker News, Reddit, RSS, ArXiv</span>
         </div>
