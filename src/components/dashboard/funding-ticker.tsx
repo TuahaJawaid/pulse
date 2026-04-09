@@ -5,14 +5,13 @@ import { FundingRound } from "@/lib/types";
 export function FundingTicker({ rounds }: { rounds: FundingRound[] }) {
   if (rounds.length === 0) return null;
 
-  // Double the items for seamless loop
   const items = [...rounds, ...rounds];
 
   return (
-    <div className="relative overflow-hidden border-b border-zinc-800 bg-zinc-950">
+    <div className="relative overflow-hidden rounded-2xl border border-border bg-card mb-6">
       <div className="flex items-center">
-        <div className="shrink-0 px-3 py-2 bg-emerald-500/10 border-r border-zinc-800">
-          <span className="text-[10px] font-mono font-medium uppercase tracking-wider text-emerald-400">
+        <div className="shrink-0 px-4 py-3 border-r border-border bg-lime/10">
+          <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-lime-foreground dark:text-lime">
             Funding
           </span>
         </div>
@@ -24,15 +23,15 @@ export function FundingTicker({ rounds }: { rounds: FundingRound[] }) {
                 href={round.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="shrink-0 flex items-center gap-2 px-4 py-2 text-xs hover:bg-zinc-900/50 transition-colors"
+                className="shrink-0 flex items-center gap-2.5 px-5 py-3 text-xs hover:bg-accent transition-colors"
               >
-                <span className="font-medium text-zinc-200">
+                <span className="font-medium text-foreground">
                   {round.company}
                 </span>
-                <span className="font-mono text-emerald-400">
+                <span className="font-mono font-semibold text-lime-foreground dark:text-lime">
                   {round.amount}
                 </span>
-                <span className="text-zinc-600">
+                <span className="text-muted-foreground">
                   {round.investors.slice(0, 2).join(", ")}
                 </span>
               </a>

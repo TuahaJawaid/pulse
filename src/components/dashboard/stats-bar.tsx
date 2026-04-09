@@ -1,30 +1,40 @@
 import { DashboardStats } from "@/lib/types";
 
 export function StatsBar({ stats }: { stats: DashboardStats }) {
+  const items = [
+    { label: "Stories", value: stats.totalStories, accent: false },
+    { label: "Funding Rounds", value: stats.fundingRounds, accent: true },
+    { label: "Launches", value: stats.majorLaunches, accent: false },
+    { label: "Research Papers", value: stats.researchPapers, accent: false },
+  ];
+
   return (
-    <div className="flex items-center gap-6 px-6 py-3 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-sm font-mono text-xs tabular-nums">
-      <div className="flex items-center gap-2">
-        <span className="text-zinc-500">Stories</span>
-        <span className="text-zinc-100 font-medium">{stats.totalStories}</span>
-      </div>
-      <div className="w-px h-3 bg-zinc-800" />
-      <div className="flex items-center gap-2">
-        <span className="text-emerald-500/80">Funding</span>
-        <span className="text-zinc-100 font-medium">{stats.fundingRounds}</span>
-      </div>
-      <div className="w-px h-3 bg-zinc-800" />
-      <div className="flex items-center gap-2">
-        <span className="text-amber-500/80">Launches</span>
-        <span className="text-zinc-100 font-medium">{stats.majorLaunches}</span>
-      </div>
-      <div className="w-px h-3 bg-zinc-800" />
-      <div className="flex items-center gap-2">
-        <span className="text-purple-500/80">Papers</span>
-        <span className="text-zinc-100 font-medium">{stats.researchPapers}</span>
-      </div>
-      <div className="ml-auto text-zinc-600">
-        Updated {new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}
-      </div>
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+      {items.map((item) => (
+        <div
+          key={item.label}
+          className={`rounded-2xl border p-5 transition-colors ${
+            item.accent
+              ? "bg-lime text-lime-foreground border-transparent"
+              : "bg-card border-border"
+          }`}
+        >
+          <div
+            className={`text-3xl font-medium tracking-tight font-mono tabular-nums ${
+              item.accent ? "" : "text-foreground"
+            }`}
+          >
+            {item.value}
+          </div>
+          <div
+            className={`text-xs font-medium mt-1.5 ${
+              item.accent ? "text-lime-foreground/70" : "text-muted-foreground"
+            }`}
+          >
+            {item.label}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

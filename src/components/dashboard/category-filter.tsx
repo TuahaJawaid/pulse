@@ -17,9 +17,9 @@ const CATEGORIES: { value: NewsCategory | "all"; label: string }[] = [
 ];
 
 export function CategoryFilter({ items }: { items: NewsItem[] }) {
-  const [activeCategory, setActiveCategory] = useState<
-    NewsCategory | "all"
-  >("all");
+  const [activeCategory, setActiveCategory] = useState<NewsCategory | "all">(
+    "all"
+  );
 
   const filtered =
     activeCategory === "all"
@@ -31,7 +31,7 @@ export function CategoryFilter({ items }: { items: NewsItem[] }) {
   return (
     <div>
       {/* Category tabs */}
-      <div className="sticky top-0 z-20 flex items-center gap-1 px-6 py-3 bg-zinc-950/95 backdrop-blur-sm border-b border-zinc-800 overflow-x-auto scrollbar-none">
+      <div className="flex items-center gap-2 mb-5 overflow-x-auto scrollbar-none pb-1">
         {CATEGORIES.map((cat) => {
           const isActive = activeCategory === cat.value;
           const count =
@@ -45,16 +45,16 @@ export function CategoryFilter({ items }: { items: NewsItem[] }) {
             <button
               key={cat.value}
               onClick={() => setActiveCategory(cat.value)}
-              className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+              className={`shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium transition-colors ${
                 isActive
-                  ? "bg-zinc-800 text-zinc-100"
-                  : "text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900"
+                  ? "bg-foreground text-background"
+                  : "bg-secondary text-muted-foreground hover:text-foreground hover:bg-accent"
               }`}
             >
               {cat.label}
               <span
                 className={`font-mono text-[10px] ${
-                  isActive ? "text-zinc-400" : "text-zinc-600"
+                  isActive ? "opacity-60" : "opacity-50"
                 }`}
               >
                 {count}
@@ -65,18 +65,20 @@ export function CategoryFilter({ items }: { items: NewsItem[] }) {
       </div>
 
       {/* Grouped feed */}
-      <div>
+      <div className="space-y-2">
         {Array.from(timeGroups.entries()).map(([group, groupItems]) => (
           <div key={group}>
             <TimeGroupHeader group={group as TimeGroup} />
-            {groupItems.map((item) => (
-              <NewsCard key={item.id} item={item} />
-            ))}
+            <div className="space-y-2">
+              {groupItems.map((item) => (
+                <NewsCard key={item.id} item={item} />
+              ))}
+            </div>
           </div>
         ))}
 
         {filtered.length === 0 && (
-          <div className="flex items-center justify-center py-20 text-sm text-zinc-600">
+          <div className="flex items-center justify-center py-20 text-sm text-muted-foreground rounded-2xl border border-border bg-card">
             No stories in this category right now.
           </div>
         )}
