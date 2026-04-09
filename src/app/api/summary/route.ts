@@ -6,7 +6,7 @@ export async function POST(req: Request) {
   const modelMessages = await convertToModelMessages(messages);
 
   const result = streamText({
-    model: "anthropic/claude-sonnet-4.6",
+    model: "anthropic/claude-haiku-4.5",
     system: `You are an elite AI intelligence analyst writing a daily briefing for a CEO.
 
 Your briefing should be:
