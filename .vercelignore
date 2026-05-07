@@ -1,0 +1,7 @@
+.env*
+!.env.example
+.DS_Store
+.git
+.gstack
+.lazyweb
+node_modules
