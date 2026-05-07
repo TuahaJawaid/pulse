@@ -26,7 +26,8 @@ function computeStats(
 ): DashboardStats {
   return {
     totalStories: items.length,
-    fundingRounds: funding.length,
+    fundingRounds:
+      funding.length || items.filter((i) => i.category === "funding").length,
     majorLaunches: items.filter((i) => i.category === "product-launch").length,
     researchPapers: items.filter((i) => i.source === "arxiv").length,
   };

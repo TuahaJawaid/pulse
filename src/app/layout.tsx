@@ -11,9 +11,9 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Pulse — AI Intelligence Briefing",
+  title: "Pulse - AI News Signal Dashboard",
   description:
-    "Your daily AI news intelligence portal. Top stories, funding rounds, research breakthroughs, and executive insights.",
+    "A public AI news signal dashboard for top stories, funding signals, research, launches, and source-tracked trends.",
 };
 
 export default function RootLayout({
@@ -25,8 +25,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${jakarta.variable} ${GeistMono.variable} h-full antialiased`}
-      // @ts-expect-error next-themes requires suppressHydrationMismatch
-      suppressHydrationMismatch
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
         <ThemeProvider>

@@ -3,7 +3,7 @@ import { DashboardStats } from "@/lib/types";
 export function StatsBar({ stats }: { stats: DashboardStats }) {
   const items = [
     { label: "Stories", value: stats.totalStories, accent: false },
-    { label: "Funding Rounds", value: stats.fundingRounds, accent: true },
+    { label: "Funding Signals", value: stats.fundingRounds, accent: true },
     { label: "Launches", value: stats.majorLaunches, accent: false },
     { label: "Research Papers", value: stats.researchPapers, accent: false },
   ];

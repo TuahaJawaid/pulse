@@ -1,14 +1,14 @@
+import { Suspense } from "react";
+import Link from "next/link";
 import { aggregateNews } from "@/lib/aggregator";
 import { StatsBar } from "@/components/dashboard/stats-bar";
-import { FundingTicker } from "@/components/dashboard/funding-ticker";
-import { ExecutiveSummary } from "@/components/dashboard/executive-summary";
 import { CategoryFilter } from "@/components/dashboard/category-filter";
 import { ThemeToggle } from "@/components/theme-toggle";
 
 export const revalidate = 300;
 
 export default async function Home() {
-  const { items, stats, funding } = await aggregateNews();
+  const { items, stats } = await aggregateNews();
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -41,20 +41,30 @@ export default async function Home() {
       {/* Hero: Stats + Funding in bento grid */}
       <section className="max-w-[1400px] w-full mx-auto px-6 py-6">
         <StatsBar stats={stats} />
-        <FundingTicker rounds={funding} />
       </section>
 
       {/* Main Content */}
       <main className="flex-1 max-w-[1400px] w-full mx-auto px-6 pb-8">
-        <ExecutiveSummary items={items} />
-        <CategoryFilter items={items} />
+        <Suspense
+          fallback={
+            <div className="rounded-xl border border-border bg-card p-6 text-sm text-muted-foreground">
+              Loading feed...
+            </div>
+          }
+        >
+          <CategoryFilter items={items} />
+        </Suspense>
       </main>
 
       {/* Footer */}
       <footer className="border-t border-border">
         <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 py-4 text-xs font-mono text-muted-foreground">
-          <span>Pulse — AI News Intelligence</span>
-          <span>Sources: Hacker News, Reddit, RSS, ArXiv</span>
+          <span>Pulse - AI News Intelligence</span>
+          <span>
+            <Link href="/about" className="hover:text-foreground">
+              Sources refresh every 5 minutes
+            </Link>
+          </span>
         </div>
       </footer>
     </div>

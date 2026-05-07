@@ -1,6 +1,8 @@
 import { NewsItem } from "@/lib/types";
 import { SourceBadge } from "./source-badge";
 import { formatDistanceToNow } from "date-fns";
+import { Bookmark, BookmarkCheck } from "lucide-react";
+import { getSignalLabel } from "@/lib/signal-score";
 
 function EngagementMetrics({
   score,
@@ -33,7 +35,17 @@ function EngagementMetrics({
   );
 }
 
-export function NewsCard({ item }: { item: NewsItem }) {
+export function NewsCard({
+  item,
+  signalScore,
+  isBookmarked = false,
+  onBookmarkToggle,
+}: {
+  item: NewsItem;
+  signalScore?: number;
+  isBookmarked?: boolean;
+  onBookmarkToggle?: (id: string) => void;
+}) {
   const timeAgo = formatDistanceToNow(new Date(item.timestamp), {
     addSuffix: true,
   });
@@ -46,14 +58,41 @@ export function NewsCard({ item }: { item: NewsItem }) {
         </div>
 
         <div className="flex-1 min-w-0 space-y-2.5">
-          <a
-            href={item.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-base font-medium leading-snug text-foreground hover:underline underline-offset-2 decoration-border"
-          >
-            {item.title}
-          </a>
+          <div className="flex items-start gap-3">
+            <a
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 text-base font-medium leading-snug text-foreground hover:underline underline-offset-2 decoration-border"
+            >
+              {item.title}
+            </a>
+
+            <div className="flex shrink-0 items-center gap-2">
+              {typeof signalScore === "number" && (
+                <span className="rounded-md border border-border bg-secondary px-2.5 py-1 text-[11px] font-mono font-semibold uppercase tracking-wide text-muted-foreground">
+                  {getSignalLabel(signalScore)} {signalScore}
+                </span>
+              )}
+              {onBookmarkToggle && (
+                <button
+                  type="button"
+                  onClick={() => onBookmarkToggle(item.id)}
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                  aria-label={
+                    isBookmarked ? "Remove saved story" : "Save story"
+                  }
+                  title={isBookmarked ? "Remove saved story" : "Save story"}
+                >
+                  {isBookmarked ? (
+                    <BookmarkCheck className="h-4 w-4" />
+                  ) : (
+                    <Bookmark className="h-4 w-4" />
+                  )}
+                </button>
+              )}
+            </div>
+          </div>
 
           {item.summary && (
             <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">

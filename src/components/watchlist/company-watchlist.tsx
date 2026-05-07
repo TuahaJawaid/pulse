@@ -1,79 +1,78 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { NewsItem } from "@/lib/types";
-
-interface CompanyCount {
-  name: string;
-  count: number;
-}
+import { X } from "lucide-react";
 
 export function CompanyWatchlist({
   items,
+  activeCompany,
   onFilterChange,
 }: {
   items: NewsItem[];
+  activeCompany?: string | null;
   onFilterChange: (company: string | null) => void;
 }) {
-  const [activeCompany, setActiveCompany] = useState<string | null>(null);
+  const [internalCompany, setInternalCompany] = useState<string | null>(null);
+  const selectedCompany =
+    activeCompany === undefined ? internalCompany : activeCompany;
 
-  // Count mentions per company
-  const companyCounts: CompanyCount[] = [];
-  const seen = new Set<string>();
+  const companyCounts = useMemo(() => {
+    const counts = new Map<string, number>();
 
-  for (const item of items) {
-    for (const tag of item.companyTags) {
-      if (!seen.has(tag)) {
-        seen.add(tag);
-        companyCounts.push({
-          name: tag,
-          count: items.filter((i) => i.companyTags.includes(tag)).length,
-        });
+    for (const item of items) {
+      for (const tag of item.companyTags) {
+        counts.set(tag, (counts.get(tag) || 0) + 1);
       }
     }
-  }
 
-  companyCounts.sort((a, b) => b.count - a.count);
+    return Array.from(counts.entries())
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count);
+  }, [items]);
+
+  const setCompany = (company: string | null) => {
+    if (activeCompany === undefined) {
+      setInternalCompany(company);
+    }
+    onFilterChange(company);
+  };
 
   if (companyCounts.length === 0) return null;
 
   return (
-    <div className="flex items-center gap-1.5 px-6 py-3 border-b border-zinc-800 overflow-x-auto scrollbar-none">
-      <span className="shrink-0 text-[10px] font-mono font-medium uppercase tracking-wider text-zinc-600 mr-2">
-        Watchlist
+    <div className="mb-4 flex items-center gap-1.5 overflow-x-auto rounded-xl border border-border bg-card px-4 py-3 scrollbar-none">
+      <span className="mr-2 shrink-0 text-[10px] font-mono font-semibold uppercase tracking-widest text-muted-foreground">
+        Trending Companies
       </span>
-      {activeCompany && (
+      {selectedCompany && (
         <button
-          onClick={() => {
-            setActiveCompany(null);
-            onFilterChange(null);
-          }}
-          className="shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-mono bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-colors"
+          type="button"
+          onClick={() => setCompany(null)}
+          className="flex shrink-0 items-center gap-1 rounded-md border border-border bg-secondary px-2.5 py-1 text-[11px] font-mono text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
         >
           Clear
-          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <X className="h-3 w-3" />
         </button>
       )}
       {companyCounts.slice(0, 10).map((company) => {
-        const isActive = activeCompany === company.name;
+        const isActive = selectedCompany === company.name;
         return (
           <button
+            type="button"
             key={company.name}
             onClick={() => {
               const next = isActive ? null : company.name;
-              setActiveCompany(next);
-              onFilterChange(next);
+              setCompany(next);
             }}
-            className={`shrink-0 flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors ${
+            className={`flex shrink-0 items-center gap-1.5 rounded-md px-2.5 py-1 text-[11px] font-medium transition-colors ${
               isActive
-                ? "bg-zinc-700 text-zinc-100"
-                : "bg-zinc-900 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800"
+                ? "bg-foreground text-background"
+                : "bg-secondary text-muted-foreground hover:bg-accent hover:text-foreground"
             }`}
           >
             {company.name}
-            <span className="font-mono text-[10px] text-zinc-500">
+            <span className="font-mono text-[10px] opacity-60">
               {company.count}
             </span>
           </button>
