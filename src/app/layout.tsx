@@ -11,9 +11,53 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Pulse - AI News Signal Dashboard",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ??
+      (process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : "http://localhost:3000")
+  ),
+  title: {
+    default: "Pulse — AI News Intelligence",
+    template: "%s · Pulse",
+  },
   description:
-    "A public AI news signal dashboard for top stories, funding signals, research, launches, and source-tracked trends.",
+    "Signal layer for AI news. Hacker News, Reddit, TechCrunch, The Verge, ArXiv — deduplicated, ranked, refreshed every 5 minutes.",
+  applicationName: "Pulse",
+  keywords: [
+    "AI news",
+    "AI dashboard",
+    "AI intelligence",
+    "machine learning",
+    "LLM news",
+    "AI signal",
+    "AI funding",
+    "AI research",
+  ],
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/icon.svg" }],
+  },
+  openGraph: {
+    type: "website",
+    title: "Pulse — AI News Intelligence",
+    description:
+      "Signal layer for AI news. Deduplicated, ranked, refreshed every 5 minutes.",
+    siteName: "Pulse",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Pulse — AI News Intelligence",
+    description:
+      "Signal layer for AI news. Deduplicated, ranked, refreshed every 5 minutes.",
+  },
+};
+
+export const viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
 };
 
 export default function RootLayout({

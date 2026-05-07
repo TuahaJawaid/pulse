@@ -29,15 +29,22 @@ async function fetchFeed(
     return (feed.items || [])
       .filter((item) => isAIRelated(item.title || "", item.contentSnippet))
       .slice(0, 15)
-      .map((item, i) => {
+      .map((item) => {
         const summary = item.contentSnippet
           ? stripHtml(item.contentSnippet).slice(0, 250)
           : item.content
             ? stripHtml(item.content).slice(0, 250)
             : null;
 
+        const slug = feedName.toLowerCase().replace(/\s+/g, "");
+        const stableKey =
+          item.guid || item.link || `${item.title || ""}-${item.isoDate || ""}`;
+        const hash = stableKey
+          .split("")
+          .reduce((acc, ch) => ((acc << 5) - acc + ch.charCodeAt(0)) | 0, 0);
+
         return {
-          id: `rss_${feedName.toLowerCase().replace(/\s+/g, "")}_${i}`,
+          id: `rss_${slug}_${Math.abs(hash).toString(36)}`,
           title: item.title || "Untitled",
           summary: summary ? summary + (summary.length >= 250 ? "..." : "") : null,
           url: item.link || "#",

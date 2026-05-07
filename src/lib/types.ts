@@ -11,6 +11,13 @@ export type NewsCategory =
 
 export type TimeGroup = "this-morning" | "overnight" | "yesterday" | "this-week";
 
+export interface RelatedSource {
+  source: NewsSource;
+  sourceDetail: string;
+  url: string;
+  id: string;
+}
+
 export interface NewsItem {
   id: string;
   title: string;
@@ -27,19 +34,13 @@ export interface NewsItem {
   };
   whyThisMatters: string | null;
   imageUrl: string | null;
-}
-
-export interface FundingRound {
-  company: string;
-  amount: string;
-  investors: string[];
-  timestamp: string;
-  url: string;
+  signalScore?: number;
+  relatedSources?: RelatedSource[];
 }
 
 export interface DashboardStats {
   totalStories: number;
-  fundingRounds: number;
+  hotSignals: number;
   majorLaunches: number;
   researchPapers: number;
 }
@@ -47,5 +48,4 @@ export interface DashboardStats {
 export interface AggregatedData {
   items: NewsItem[];
   stats: DashboardStats;
-  funding: FundingRound[];
 }

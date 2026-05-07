@@ -165,3 +165,152 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* ============================================================
+   WIRE — brutalist terminal aesthetic, scoped to .wire-root
+   Lives at /wire. Does not affect the main dashboard at /.
+   ============================================================ */
+
+.wire-root {
+  /* Light: clean white, near-black ink, lime accent (matches Pulse brand) */
+  --wire-bg: oklch(0.99 0 0);
+  --wire-fg: oklch(0.13 0 0);
+  --wire-rule: rgba(0, 0, 0, 0.14);
+  --wire-mute: rgba(0, 0, 0, 0.55);
+  --wire-cold: rgba(0, 0, 0, 0.30);
+  --wire-signal: oklch(0.74 0.18 130); /* lime — readable on white */
+  --wire-hot: oklch(0.62 0.22 25);
+  --wire-row-hover: rgba(0, 0, 0, 0.04);
+
+  background: var(--wire-bg);
+  color: var(--wire-fg);
+  font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-feature-settings: "ss01", "ss02", "tnum";
+  font-variant-ligatures: none;
+  font-size: 14px;
+  min-height: 100vh;
+}
+
+:where(.dark) .wire-root {
+  /* Dark: near-black, off-white, lime accent */
+  --wire-bg: oklch(0.13 0 0);
+  --wire-fg: oklch(0.96 0 0);
+  --wire-rule: rgba(255, 255, 255, 0.16);
+  --wire-mute: rgba(255, 255, 255, 0.55);
+  --wire-cold: rgba(255, 255, 255, 0.30);
+  --wire-signal: oklch(0.84 0.19 130);
+  --wire-hot: oklch(0.7 0.2 25);
+  --wire-row-hover: rgba(255, 255, 255, 0.06);
+}
+
+.wire-root,
+.wire-root *,
+.wire-root *::before,
+.wire-root *::after {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border-color: var(--wire-rule);
+}
+
+.wire-root ::selection {
+  background: var(--wire-fg);
+  color: var(--wire-bg);
+}
+
+.wire-root a {
+  color: inherit;
+  text-decoration: none;
+}
+/* Hover: subtle accent shift, no inversion — preserves child contrast */
+.wire-root a:hover {
+  color: var(--wire-signal);
+  background: transparent;
+}
+/* Soft row tint for table/feed rows on hover, without flipping text colors */
+.wire-root .wire-row-hover:hover,
+.wire-root a.wire-row-hover:hover {
+  background: var(--wire-row-hover);
+  color: inherit;
+}
+
+.wire-root button {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+.wire-root input,
+.wire-root select,
+.wire-root textarea {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  outline: 0;
+}
+
+:where(.dark) .wire-scanlines::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(232, 223, 196, 0.018) 3px,
+    rgba(232, 223, 196, 0.018) 3px
+  );
+  z-index: 100;
+  mix-blend-mode: screen;
+}
+
+@keyframes wire-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.wire-root .wire-cursor {
+  display: inline-block;
+  animation: wire-blink 1.05s steps(1, end) infinite;
+}
+
+@keyframes wire-tick {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  100% { opacity: 0; }
+}
+.wire-root .wire-tick {
+  animation: wire-tick 2.4s linear infinite;
+}
+
+.wire-root .wire-rule {
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  color: var(--wire-rule);
+  letter-spacing: 0;
+  user-select: none;
+  line-height: 1;
+}
+
+/* Hot-tape marquee */
+@keyframes wire-marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-wire-marquee {
+  animation: wire-marquee 60s linear infinite;
+  width: max-content;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-wire-marquee { animation: none; }
+}
+
+/* Focused row indicator (keyboard navigation) */
+.wire-root .wire-row-focused {
+  outline: 1px solid var(--wire-signal);
+  outline-offset: -1px;
+  background: var(--wire-row-hover);
+}

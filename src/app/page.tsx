@@ -1,72 +1,67 @@
 import { Suspense } from "react";
-import Link from "next/link";
+import { format } from "date-fns";
 import { aggregateNews } from "@/lib/aggregator";
-import { StatsBar } from "@/components/dashboard/stats-bar";
-import { CategoryFilter } from "@/components/dashboard/category-filter";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { WireMasthead } from "@/components/wire/wire-masthead";
+import { WireDossier } from "@/components/wire/wire-dossier";
+import { WireConsole } from "@/components/wire/wire-console";
+import { WireFooter } from "@/components/wire/wire-footer";
+import { WireTape } from "@/components/wire/wire-tape";
+import { HomeJsonLd } from "@/components/wire/home-json-ld";
 
 export const revalidate = 300;
 
 export default async function Home() {
   const { items, stats } = await aggregateNews();
 
+  const lead =
+    [...items].sort((a, b) => (b.signalScore ?? 0) - (a.signalScore ?? 0))[0] ??
+    null;
+
+  const now = new Date();
+  const dayOfYear = Math.ceil(
+    (now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / 86_400_000
+  );
+  const cycle = `${format(now, "yyyy.MM.dd HH:mm")} UTC · CYC ${dayOfYear
+    .toString()
+    .padStart(3, "0")}`;
+
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Header */}
-      <header className="sticky top-0 z-30 border-b border-border bg-background/80 backdrop-blur-lg">
-        <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-lime text-lime-foreground font-bold text-base">
-              P
-            </div>
-            <h1 className="text-xl font-semibold tracking-tight">Pulse</h1>
-            <span className="text-xs font-mono uppercase tracking-widest text-muted-foreground border border-border rounded-full px-2.5 py-0.5">
-              AI Intelligence
-            </span>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="hidden sm:block text-sm font-mono text-muted-foreground">
-              {new Date().toLocaleDateString("en-US", {
-                weekday: "long",
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}
-            </span>
-            <ThemeToggle />
-          </div>
-        </div>
-      </header>
-
-      {/* Hero: Stats + Funding in bento grid */}
-      <section className="max-w-[1400px] w-full mx-auto px-6 py-6">
-        <StatsBar stats={stats} />
-      </section>
-
-      {/* Main Content */}
-      <main className="flex-1 max-w-[1400px] w-full mx-auto px-6 pb-8">
+    <div className="wire-root wire-scanlines">
+      <div className="relative mx-auto max-w-[1280px] px-6 sm:px-8 pb-8">
+        <WireMasthead
+          cycle={cycle}
+          stats={{
+            stories: stats.totalStories,
+            hot: stats.hotSignals,
+            capital: items.filter((i) => i.category === "funding").length,
+          }}
+        />
+        <WireTape items={items} />
+        <WireDossier
+          lead={lead}
+          cycleStats={{
+            stories: stats.totalStories,
+            capital: items.filter((i) => i.category === "funding").length,
+            launches: stats.majorLaunches,
+            research: stats.researchPapers,
+          }}
+          newSinceLabel={null}
+        />
         <Suspense
           fallback={
-            <div className="rounded-xl border border-border bg-card p-6 text-sm text-muted-foreground">
-              Loading feed...
-            </div>
+            <p
+              className="py-10 text-[12px] uppercase tracking-[0.18em]"
+              style={{ color: "var(--wire-mute)" }}
+            >
+              &gt; tuning the wire…
+            </p>
           }
         >
-          <CategoryFilter items={items} />
+          <WireConsole items={items} />
         </Suspense>
-      </main>
-
-      {/* Footer */}
-      <footer className="border-t border-border">
-        <div className="max-w-[1400px] mx-auto flex items-center justify-between px-6 py-4 text-xs font-mono text-muted-foreground">
-          <span>Pulse - AI News Intelligence</span>
-          <span>
-            <Link href="/about" className="hover:text-foreground">
-              Sources refresh every 5 minutes
-            </Link>
-          </span>
-        </div>
-      </footer>
+        <WireFooter refreshSeconds={revalidate} />
+      </div>
+      <HomeJsonLd items={items} />
     </div>
   );
 }
